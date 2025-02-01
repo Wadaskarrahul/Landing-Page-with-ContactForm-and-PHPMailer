@@ -1,0 +1,15 @@
+ /* Background Image */
+ .bg-image {
+    /* background: url('https://unsplash.com/photos/the-mountains-are-covered-in-snow-and-clouds-9Kwb05iNtRU') no-repeat center center/cover; */
+    /* background: url('/public/assets/images/background.jpg') ; */
+    /* no-repeat center center/cover; */
+  
+    height: 100vh;
+}
+
+/* Dark Overlay for better readability */
+.overlay {
+    background: rgba(4, 0, 0, 0.7);
+    height: 100vh;
+    color: white;
+}
