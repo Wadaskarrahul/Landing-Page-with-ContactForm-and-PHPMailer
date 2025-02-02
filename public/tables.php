@@ -23,9 +23,32 @@
                     <th scope="col">First</th>
                     <th scope="col">Last</th>
                     <th scope="col">office</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="projectTable">
+                <?php
+                // Fetch data from database
+                include '../app/config.php'; // Make sure you have a db connection
+
+                $sql = "SELECT id, first_name,last_name,office FROM employees"; // Example query
+                $stmt = $pdo->query($sql);  // Prepare and execute the query
+
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['first_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['office']) . "</td>";
+
+                    echo "<td>
+                    <button class='edit-btn' data-id='" . $row['id'] . "'>Edit</button>
+                    <button class='delete-btn' data-id='" . $row['id'] . "'>Delete</button>
+                  </td>";
+                    echo "</tr>";
+                }
+                ?>
+                <!--
                 <tr>
                     <th scope="row">1</th>
                     <td>Mark</td>
@@ -43,6 +66,7 @@
                     <td colspan="2">Larry the Bird</td>
                     <td>@twitter</td>
                 </tr>
+-->
             </tbody>
         </table>
     </div>
@@ -57,37 +81,75 @@
     <script>
         $(document).ready(function() {
             $('table').DataTable({
-                "processing": true,
-                "serverSide": false,
-                "ajax": {
-                    "url": "../app/fetchTableData.php",
-                    "type": "GET",
-                    "dataSrc": "" // Ensures DataTables correctly reads the JSON array
-                },
-                "columns": [{
-                        "data": "id"
-                    }, // Must match JSON key "id"
+                dom: 'Bfrtip',
+                buttons: [
                     {
-                        "data": "first_name"
-                    }, // Must match JSON key "name"
+                        extend: 'csvHtml5',
+                        title: 'Data Export CSV'
+                    },
                     {
-                        "data": "last_name"
-                    }, // Must match JSON key "client"
+                        extend: 'excelHtml5',
+                        title: 'Data Export Excel'
+                    },
                     {
-                        "data": "office"
-                    } // Must match JSON key "status"
+                        extend: 'pdfHtml5',
+                        title: 'Data Export PDF',
+                        orientation: 'portrait',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Data Table Print View'
+                    }
                 ]
+                // "paging": true,
+                /* "lengthChange": true,
+                 "searching": true,
+                 "ordering": true,
+                 "info": true,
+                 "processing": true,
+                 "serverSide": false,
+                 "ajax": {
+                     "url": "../app/fetchTableData.php",
+                     "type": "GET",
+                     "dataSrc": "" // Ensures DataTables correctly reads the JSON array
+                 },
+                 "columns": [{
+                         "data": "id"
+                     }, // Must match JSON key "id"
+                     {
+                         "data": "first_name"
+                     }, // Must match JSON key "name"
+                     {
+                         "data": "last_name"
+                     }, // Must match JSON key "client"
+                     {
+                         "data": "office"
+                     } // Must match JSON key "status"
+                 ]*/
+            });
+            // Edit button click
+            $(document).on('click', '.edit-btn', function() {
+                var userId = $(this).data('id');
+                window.location.href = "edit_user.php?id=" + userId; // Redirect to edit page
+            });
+            // Delete button click
+            $(document).on('click', '.delete-btn', function() {
+                var userId = $(this).data('id');
+                if (confirm('Are you sure you want to delete this user?')) {
+                    window.location.href = "delete_user.php?id=" + userId; // Redirect to delete page
+                }
             });
         });
     </script>
     <script>
-      /*  $(document).ready(function() {
+        /*   $(document).ready(function() {
             // Fetch data when the page loads
             fetchProjects();
 
             function fetchProjects() {
                 $.ajax({
-                    url: '/app/fetchTableData.php',
+                    url: '../app/fetchTableData.php',
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -95,10 +157,13 @@
                         $.each(response, function(index, project) {
                             rows += `<tr>
                                         <td>${project.id}</td>
-                                        <td>${project.name}</td>
-                                        <td>${project.client}</td>
-                                        <td><span class="badge bg-${getStatusColor(project.status)}">${project.status}</span></td>
+                                        <td>${project.first_name}</td>
+                                        <td>${project.last_name}</td>
+                                        <td>${project.office }</td>
+
                                     </tr>`;
+                                    // <!-- <td><span class="badge bg-${getStatusColor(project.status)}">${project.status}</span></td> -->
+
                         });
                         $('#projectTable').html(rows);
                     },
