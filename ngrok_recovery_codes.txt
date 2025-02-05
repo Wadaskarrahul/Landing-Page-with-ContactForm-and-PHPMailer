@@ -1,0 +1,18 @@
+Recovery codes
+The below codes are used to recover your account in case you lose access to your MFA authenticator.
+
+Save these recovery codes as securely as a password. We recommend using a password manager such as 1Password, KeePassXC, or bitwarden.
+
+If you cannot find these codes, you will lose access to your account.
+
+
+R7SVQX8ESG
+9V7P48UMFK
+PYDDU8Z7HN
+MUB3E7R54U
+MJHPARBCXS
+PS52QUW6D4
+JRR9DRDCZA
+X3YCN7KARA
+A8ZDUCUA5B
+SWZG9BEVNQ

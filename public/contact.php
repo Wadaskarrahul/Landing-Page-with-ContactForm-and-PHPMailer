@@ -36,6 +36,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             // create a Mailsender Instance and mailer object to send email
             // get the mailer object and set up the email content and sender details
             // send the email
+            /**
+             * send the data to the saleforce
+             * saveSaleforce($name, $email, $message);
+             */
             $mailSender = new MailSender();
             $mail = $mailSender->getMailer();
             try{
